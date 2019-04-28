@@ -1,5 +1,5 @@
-#ifndef _VGA_H
-#define _VGA_H
+#ifndef _DRIVERS_DISPLAY_VGA_H
+#define _DRIVERS_DISPLAY_VGA_H
 
 #include <stdint.h>
 
