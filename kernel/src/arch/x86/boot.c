@@ -20,6 +20,11 @@ typedef struct multiboot_memory_map {
 void x86_boot(unsigned long magic, multiboot_info_t * mb_info) {
 	kernel_early();
 
+	if (magic != MULTIBOOT_BOOTLOADER_MAGIC) {
+		kprintf("A Multiboot compliant bootloader is required.\n");
+		while (1) {}
+	}
+
 	kprintf("Multiboot memory map:\n");
 	multiboot_memory_map_t * mmap = (multiboot_memory_map_t *) mb_info->mmap_addr;
 	while ((uint32_t) mmap < (mb_info->mmap_addr + mb_info->mmap_length))
