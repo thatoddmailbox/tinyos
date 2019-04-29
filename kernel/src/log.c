@@ -26,6 +26,48 @@ void _print_int(uint32_t num, int base) {
 	}
 }
 
+void khexdump(void * data, uint32_t size) {
+	uint32_t last_line = size % LOG_HEXDUMP_LINE_SIZE;
+	uint32_t lines = size / LOG_HEXDUMP_LINE_SIZE;
+	if (last_line > 0) {
+		lines += 1;
+	}
+
+	void * data_pointer = data;
+	for (uint32_t i = 0; i < lines; i++) {
+		kprintf("0x%x | ", data_pointer);
+		uint32_t line_size = LOG_HEXDUMP_LINE_SIZE;
+		if (i == lines - 1 && last_line > 0) {
+			line_size = last_line;
+		}
+
+		for	(uint32_t j = 0; j < line_size; j++) {
+			uint8_t data_byte = *((uint8_t *) data_pointer);
+			if (data_byte < 0x10) {
+				kprintf("0");
+			}
+			kprintf("%x ", data_byte);
+			data_pointer++;
+		}
+
+		kprintf("| ");
+
+		data_pointer -= line_size;
+
+		for	(uint32_t j = 0; j < line_size; j++) {
+			uint8_t data_byte = *((uint8_t *) data_pointer);
+			if (data_byte > 0x1f && data_byte < 0x80) {
+				term_get_current()->putc(data_byte);
+			} else {
+				term_get_current()->putc('.');
+			}
+			data_pointer++;
+		}
+
+		kprintf(" |\n");
+	}
+}
+
 void kputs(char * message) {
 	while (*message) {
 		term_get_current()->putc(*message);
