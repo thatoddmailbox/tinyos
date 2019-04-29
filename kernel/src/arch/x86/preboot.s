@@ -22,8 +22,27 @@ stack_bottom:
 stack_top:
 
 section .text
+
 global _start:function (_start.end - _start)
+global gdt_update
 extern x86_boot
+
+gdt_update:
+	xchg bx, bx
+	mov eax, [esp + 4]
+	lgdt [eax]
+
+	jmp 0x08:.update_segments
+.update_segments
+	mov ax, 0x10
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov ss, ax
+
+	ret
+
 _start:
 	mov esp, stack_top
 	cli

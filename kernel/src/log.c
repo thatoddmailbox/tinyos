@@ -1,6 +1,6 @@
 #include "log.h"
 
-void _print_int(uint32_t num, int base) {
+static void _print_int(uint32_t num, int base) {
 	if (num == 0) {
 		term_get_current()->putc('0');
 		return;

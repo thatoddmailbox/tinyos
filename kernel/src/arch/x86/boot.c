@@ -1,5 +1,6 @@
 #include <stdint.h>
 
+#include "arch/x86/descriptors.h"
 #include "arch/x86/multiboot.h"
 
 #include "memory/manager.h"
@@ -27,6 +28,9 @@ void x86_boot(unsigned long magic, multiboot_info_t * mb_info) {
 		while (1) {}
 	}
 
+	descriptors_init();
+
+	// read out the memory map
 	kprintf("Multiboot memory map:\n");
 	multiboot_memory_map_t * mmap = (multiboot_memory_map_t *) mb_info->mmap_addr;
 	while ((uint32_t) mmap < (mb_info->mmap_addr + mb_info->mmap_length)) {
