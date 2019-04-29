@@ -10,7 +10,7 @@ term_interface_t * term_get_current() {
 	return current_term;
 }
 
-term_interface_t * term_set_current(term_interface_t * new_term) {
+void term_set_current(term_interface_t * new_term) {
 	current_term = new_term;
 	current_term->init();
 }

@@ -28,6 +28,10 @@ _start:
 	mov esp, stack_top
 	cli
 
+	; pass some important parameters to the c code
+	push ebx ; pointer to multiboot info struct
+	push eax ; multiboot magic
+
 	call x86_boot
 
 .hang:	hlt

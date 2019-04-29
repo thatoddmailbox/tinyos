@@ -5,7 +5,7 @@
 
 #include "term/term.h"
 
-void vgaterm_puts(char * msg);
+void vgaterm_putc(char c);
 
 term_interface_t vgaterm;
 

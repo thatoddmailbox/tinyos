@@ -8,20 +8,21 @@ void vgaterm_init() {
 	vgaterm_y = 0;
 }
 
-void vgaterm_puts(char * msg) {
-	char * c = msg;
-	while (*c) {
-		vga_putc(vgaterm_x, vgaterm_y, *c);
-		vgaterm_x++;
-		if (vgaterm_x >= VGA_MODE_WIDTH) {
-			vgaterm_x = 0;
-			vgaterm_y++;
-		}
-		c++;
+void vgaterm_putc(char c) {
+	if (c == '\n') {
+		vgaterm_x = 0;
+		vgaterm_y++;
+		return;
+	}
+	vga_putc(vgaterm_x, vgaterm_y, c);
+	vgaterm_x++;
+	if (vgaterm_x >= VGA_MODE_WIDTH) {
+		vgaterm_x = 0;
+		vgaterm_y++;
 	}
 }
 
 term_interface_t vgaterm = {
 	.init = vgaterm_init,
-	.puts = vgaterm_puts
+	.putc = vgaterm_putc
 };

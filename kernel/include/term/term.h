@@ -5,11 +5,11 @@
 
 typedef struct {
 	void (*init)();
-	void (*puts)(char *);
+	void (*putc)(char);
 } term_interface_t;
 
 void term_init();
 term_interface_t * term_get_current();
-term_interface_t * term_set_current(term_interface_t * new_term);
+void term_set_current(term_interface_t * new_term);
 
 #endif
