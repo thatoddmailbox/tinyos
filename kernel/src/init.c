@@ -38,5 +38,9 @@ void kernel_init(const char * command_line) {
 
 	khexdump((void *) 0x100000, 64);
 
+	kprintf("yay\n");
+	kprintf("yay\n");
+	kprintf("yay\n");
+
 	while (1) {}
 }

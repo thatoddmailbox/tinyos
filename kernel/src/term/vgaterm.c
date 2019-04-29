@@ -14,6 +14,13 @@ void vgaterm_putc(char c) {
 		vgaterm_y++;
 		return;
 	}
+
+	if (vgaterm_y >= VGA_MODE_HEIGHT) {
+		// scroll everything up
+		vga_shift_up();
+		vgaterm_y = VGA_MODE_HEIGHT - 1;		
+	}
+
 	vga_putc(vgaterm_x, vgaterm_y, c);
 	vgaterm_x++;
 	if (vgaterm_x >= VGA_MODE_WIDTH) {

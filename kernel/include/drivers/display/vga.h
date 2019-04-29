@@ -9,5 +9,6 @@
 
 void vga_init();
 void vga_putc(int x, int y, char c);
+void vga_shift_up();
 
 #endif
