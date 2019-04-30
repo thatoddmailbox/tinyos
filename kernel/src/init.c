@@ -1,5 +1,9 @@
 #include <stdint.h>
 
+#include "drivers/manager.h"
+
+#include "irq/irq.h"
+
 #include "memory/manager.h"
 
 #include "term/term.h"
@@ -11,10 +15,15 @@ void kernel_early() {
 	term_init();
 	term_set_current(&vgaterm);
 
+	irq_init();
+
 	memory_manager_init(&kernel_memory_manager);
 }
 
 void kernel_init(const char * command_line) {
+	drivers_init();
+	drivers_setup();
+
 	kprintf("Hello, this is a test. Command line: %s\n", command_line);
 
 	// void * yay = memory_manager_alloc(&kernel_memory_manager, 4);

@@ -17,11 +17,5 @@ void irq_handler(registers_t regs) {
 		return;
 	}
 
-	kprintf("irq_handler(%d)\n", irq_num);
-
-	// if (interrupt_handlers[regs.int_no] != 0)
-	// {
-	// 	isr_t handler = interrupt_handlers[regs.int_no];
-	// 	handler(regs);
-	// }
+	irq_handle(irq_num);
 } 

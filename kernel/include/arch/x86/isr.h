@@ -6,6 +6,7 @@
 
 #include "arch/x86/pic.h"
 
+#include "irq/irq.h"
 #include "log.h"
 
 typedef struct {

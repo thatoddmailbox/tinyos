@@ -14,19 +14,6 @@ void pic_init() {
 	outb(PIC2_DATA, 2); // icw3: tell slave pic it's on irq2
 	outb(PIC2_DATA, PIC_ICW4_8086); // icw4
 	outb(PIC2_DATA, 0); // default to no masking
-	
-	uint32_t divisor = 1193180 / 1;
-
-	// Send the command byte.
-	// outb(0x43, 0x36);
-
-	// Divisor has to be sent byte-wise, so split here into upper/lower bytes.
-	uint8_t l = (uint8_t)(divisor & 0xFF);
-	uint8_t h = (uint8_t)( (divisor>>8) & 0xFF );
-
-	// Send the frequency divisor.
-	// outb(0x40, l);
-	// outb(0x40, h);
 }
 
 void pic_master_eoi() {
