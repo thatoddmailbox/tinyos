@@ -2,6 +2,7 @@
 
 #include "arch/x86/descriptors.h"
 #include "arch/x86/multiboot.h"
+#include "arch/x86/pic.h"
 
 #include "memory/manager.h"
 
@@ -29,6 +30,7 @@ void x86_boot(unsigned long magic, multiboot_info_t * mb_info) {
 	}
 
 	descriptors_init();
+	pic_init();
 
 	// read out the memory map
 	kprintf("Multiboot memory map:\n");

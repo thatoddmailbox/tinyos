@@ -25,10 +25,10 @@ section .text
 
 global _start:function (_start.end - _start)
 global gdt_update
+global idt_update
 extern x86_boot
 
 gdt_update:
-	xchg bx, bx
 	mov eax, [esp + 4]
 	lgdt [eax]
 
@@ -41,6 +41,11 @@ gdt_update:
 	mov gs, ax
 	mov ss, ax
 
+	ret
+
+idt_update:
+	mov eax, [esp + 4]
+	lidt [eax]
 	ret
 
 _start:
