@@ -4,6 +4,7 @@
 
 #include "irq/irq.h"
 
+#include "memory/kmalloc.h"
 #include "memory/manager.h"
 
 #include "term/term.h"
@@ -20,41 +21,41 @@ void kernel_early() {
 	memory_manager_init(&kernel_memory_manager);
 }
 
-extern uint32_t _kernel_end;
-
 void kernel_init(const char * command_line) {
 	drivers_init();
 	drivers_setup();
 
 	kprintf("Hello, this is a test. Command line: %s\n", command_line);
-	kprintf("0x%x\n", &_kernel_end);
 
-	// void * yay = memory_manager_alloc(&kernel_memory_manager, 4);
-	// kprintf("Allocated 4 bytes at 0x%x\n", yay);
+	void * yay = kmalloc(4);
+	kprintf("Allocated 4 bytes at 0x%x\n", yay);
 
-	// void * yay2 = memory_manager_alloc(&kernel_memory_manager, 20);
-	// kprintf("Allocated 20 bytes at 0x%x\n", yay2);
+	void * yay2 = kmalloc(20);
+	kprintf("Allocated 20 bytes at 0x%x\n", yay2);
 
-	// void * yay3 = memory_manager_alloc(&kernel_memory_manager, 4);
-	// kprintf("Allocated 4 bytes at 0x%x\n", yay3);
+	void * yay3 = kmalloc(4);
+	kprintf("Allocated 4 bytes at 0x%x\n", yay3);
 
-	// khexdump((void *) 0x100000, 64);
+	// khexdump((void *) 0xC0100000, 64);
 
-	// memory_manager_free(&kernel_memory_manager, yay2);
-	// kprintf("Freed 16 bytes at 0x%x\n", yay2);
+	kfree(yay2);
+	kprintf("Freed 16 bytes at 0x%x\n", yay2);
 
-	// khexdump((void *) 0x100000, 64);
+	// khexdump((void *) 0xC0100000, 64);
 
-	// void * yay4 = memory_manager_alloc(&kernel_memory_manager, 4);
-	// kprintf("Allocated 4 bytes at 0x%x\n", yay4);
+	void * yay4 = kmalloc(4);
+	kprintf("Allocated 4 bytes at 0x%x\n", yay4);
 
-	// khexdump((void *) 0x100000, 64);
+	// khexdump((void *) 0xC0100000, 64);
+
+	// *((uint32_t *)(0xC1000ABC)) = 0x0;
 
 	kprintf("yay\n");
 	kprintf("yay\n");
 	kprintf("yay\n");
 
-	asm volatile ("int $0x3");
+	// asm volatile ("int $0x3");
+
 	asm volatile ("sti");
 
 	while (1) {}

@@ -21,6 +21,8 @@ typedef struct multiboot_memory_map {
 	uint32_t type;
 } __attribute__((packed)) multiboot_memory_map_t;
 
+extern uint32_t _kernel_end;
+
 void x86_boot(unsigned long magic, multiboot_info_t * mb_info) {
 	kernel_early();
 
@@ -54,6 +56,12 @@ void x86_boot(unsigned long magic, multiboot_info_t * mb_info) {
 
 	// 	mmap = (multiboot_memory_map_t *) ((uint32_t) mmap + mmap->size + sizeof(uint32_t));
 	// }
+	// so, instead of doing that, we just take the memory from the end of the kernel to the end of the first 4MB of memory
+	uint32_t paging_end_address = 0xc0000000 + 0x3fffff;
+	uint32_t total_size = paging_end_address - (uint32_t)&_kernel_end;
+	memory_manager_add_heap(&kernel_memory_manager, &_kernel_end, total_size);
+	kprintf("[x86_boot] kernel ram from 0x%x to 0x%x\n", &_kernel_end, paging_end_address);
+	kprintf("[x86_boot] reserved %d bytes for kernel memory\n", total_size);
 
 	kernel_init(""); //(const char *) mb_info->cmdline);
 }

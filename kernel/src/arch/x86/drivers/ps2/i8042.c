@@ -10,13 +10,13 @@ static void _i8042_handle_irq(uint8_t irq, void * irq_state) {
 	}
 
 	uint8_t data = inb(I8042_DATA);
-	kprintf("i8042: 0x%x\n", data);
+	kprintf("[i8042] 0x%x\n", data);
 
 	// TODO: send the data somewhere
 }
 
 void i8042_init(driver_t * driver) {
-	kprintf("i8042: init\n");
+	kprintf("[i8042] init\n");
 
 	// disable both ports
 	outb(I8042_COMMAND, I8042_COMMAND_DISABLE_PORT0);
@@ -50,7 +50,7 @@ void i8042_init(driver_t * driver) {
 	uint8_t response = inb(I8042_DATA);
 
 	if (response != 0x55) {
-		kprintf("i8042: self-test failed!");
+		kprintf("[i8042] self-test failed!");
 		return;
 	}
 
@@ -67,7 +67,7 @@ void i8042_init(driver_t * driver) {
 		}
 	}
 
-	kprintf("i8042: found controller with %d port(s)\n", port_count);
+	kprintf("[i8042] found controller with %d port(s)\n", port_count);
 
 	outb(I8042_COMMAND, I8042_COMMAND_ENABLE_PORT0);
 
