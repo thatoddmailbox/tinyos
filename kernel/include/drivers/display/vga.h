@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define VGA_BASE 0xB8000
+#define VGA_BASE (0xC0000000 + 0xB8000)
 #define VGA_MODE_WIDTH 80
 #define VGA_MODE_HEIGHT 25
 

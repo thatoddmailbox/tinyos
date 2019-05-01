@@ -20,11 +20,14 @@ void kernel_early() {
 	memory_manager_init(&kernel_memory_manager);
 }
 
+extern uint32_t _kernel_end;
+
 void kernel_init(const char * command_line) {
 	drivers_init();
 	drivers_setup();
 
 	kprintf("Hello, this is a test. Command line: %s\n", command_line);
+	kprintf("0x%x\n", &_kernel_end);
 
 	// void * yay = memory_manager_alloc(&kernel_memory_manager, 4);
 	// kprintf("Allocated 4 bytes at 0x%x\n", yay);

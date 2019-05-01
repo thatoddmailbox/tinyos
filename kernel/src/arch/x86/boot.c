@@ -33,26 +33,27 @@ void x86_boot(unsigned long magic, multiboot_info_t * mb_info) {
 	pic_init();
 
 	// read out the memory map
-	kprintf("Multiboot memory map:\n");
-	multiboot_memory_map_t * mmap = (multiboot_memory_map_t *) mb_info->mmap_addr;
-	while ((uint32_t) mmap < (mb_info->mmap_addr + mb_info->mmap_length)) {
-		// print out debug info
-		uint32_t end = mmap->base_addr + mmap->length;
-		kprintf("from 0x%x ", mmap->base_addr);
-		kprintf("to 0x%x", end);
-		kprintf(" | %d bytes | %d\n", (uint32_t) mmap->length, mmap->type);
+	// except this doesn't work right now because it's in the lower half of physical memory, which isn't mapped
+	// kprintf("Multiboot memory map:\n");
+	// multiboot_memory_map_t * mmap = (multiboot_memory_map_t *) mb_info->mmap_addr;
+	// while ((uint32_t) mmap < (mb_info->mmap_addr + mb_info->mmap_length)) {
+	// 	// print out debug info
+	// 	uint32_t end = mmap->base_addr + mmap->length;
+	// 	kprintf("from 0x%x ", mmap->base_addr);
+	// 	kprintf("to 0x%x", end);
+	// 	kprintf(" | %d bytes | %d\n", (uint32_t) mmap->length, mmap->type);
 
-		// is it usable ram?
-		if (mmap->type == MULTIBOOT_MEMORY_TYPE_USABLE_RAM) {
-			// is it not the weird first chunk?
-			if (mmap->base_addr != NULL) {
-				// tell the memory manager about it
-				memory_manager_add_heap(&kernel_memory_manager, (void *) mmap->base_addr, mmap->length);
-			}
-		}
+	// 	// is it usable ram?
+	// 	if (mmap->type == MULTIBOOT_MEMORY_TYPE_USABLE_RAM) {
+	// 		// is it not the weird first chunk?
+	// 		if (mmap->base_addr != NULL) {
+	// 			// tell the memory manager about it
+	// 			memory_manager_add_heap(&kernel_memory_manager, (void *) mmap->base_addr, mmap->length);
+	// 		}
+	// 	}
 
-		mmap = (multiboot_memory_map_t *) ((uint32_t) mmap + mmap->size + sizeof(uint32_t));
-	}
+	// 	mmap = (multiboot_memory_map_t *) ((uint32_t) mmap + mmap->size + sizeof(uint32_t));
+	// }
 
-	kernel_init((const char *) mb_info->cmdline);
+	kernel_init(""); //(const char *) mb_info->cmdline);
 }
