@@ -1,6 +1,6 @@
 #include "arch/x86/isr.h"
 
-void page_fault(registers_t regs) {
+void page_fault(registers_t * regs) {
 	uint32_t faulting_address;
 	asm volatile("mov %%cr2, %0" : "=r" (faulting_address));
 
@@ -12,7 +12,7 @@ void page_fault(registers_t regs) {
 
 void isr_handler(registers_t regs) {
 	if (regs.int_no == 14) {
-		page_fault(regs);
+		page_fault(&regs);
 		return;
 	}
 
