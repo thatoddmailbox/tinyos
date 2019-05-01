@@ -21,7 +21,7 @@ void kernel_early() {
 	memory_manager_init(&kernel_memory_manager);
 }
 
-void kernel_init(const char * command_line) {
+void kernel_init(char * command_line) {
 	drivers_init();
 	drivers_setup();
 

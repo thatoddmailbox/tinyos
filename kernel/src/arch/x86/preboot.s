@@ -34,6 +34,7 @@ section .text
 global _start:function (_start.end - _start)
 global gdt_update
 global idt_update
+global remove_lower_paging
 extern x86_boot
 
 gdt_update:
@@ -95,25 +96,25 @@ _start:
 	or eax, 0x80000001
 	mov cr0, eax
 
-	; jump to code running in upper half, so that we can keep running when the lower mapping is pulled away
-	; for some reason, nasm has no way to force an absolute jump
-	; so, load the address into a register, and jump to that
-	mov ecx, .continue_in_upper_half
-	jmp ecx
+	; fix esp to be the virtual address for the stack
+	add esp, 0xC0000000
 
-.continue_in_upper_half:
-	; now that we've successfully yote ourselves into the upper half of memory, we can remove the lower mapping
+	; this function call will also yeet eip into the upper half, meaning that we'll be ok when the lower mapping is removed
+	; (since x86_boot is located above 0xC0000000)
+	; however, we have to do this weird indirect call because other nasm does a relative jump
+	mov ecx, x86_boot
+	call ecx
+
+.hang:	hlt
+	jmp .hang
+.end:
+
+remove_lower_paging:
+	; we can remove the lower mapping safely now
 	mov dword [boot_page_directory - 0xC0000000 + 0], 0
 
 	; boonk cr3 so that the cpu clears its cache
 	mov eax, cr3
 	mov cr3, eax
 
-	; fix esp to be the virtual address for the stack
-	add esp, 0xC0000000
-
-	call x86_boot
-
-.hang:	hlt
-	jmp .hang
-.end:
+	ret
