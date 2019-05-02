@@ -1,5 +1,40 @@
 #include "arch/x86/isr.h"
 
+const char * exceptions[] = {
+	"Divide Error",
+	"Debug",
+	"NMI",
+	"Breakpoint",
+	"Overflow",
+	"BOUND Range Exceeded",
+	"Invalid Opcode",
+	"Device Not Available",
+	"Double Fault",
+	"CoProcessor Segment Overrun",
+	"Invalid TSS",
+	"Segment Not Present",
+	"Stack Segment Fault",
+	"General Protection Fault",
+	"Page Fault",
+	"Reserved",
+	"Floating-Point Error",
+	"Alignment Check",
+	"Machine Check",
+	"SIMD Floating-Point Exception",
+	"Virtualization Exception",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved"
+};
+
 void page_fault(registers_t * regs) {
 	uint32_t faulting_address;
 	asm volatile("mov %%cr2, %0" : "=r" (faulting_address));
@@ -16,7 +51,9 @@ void isr_handler(registers_t regs) {
 		return;
 	}
 
-	kprintf("isr_handler(%d)\n", regs.int_no);
+	kprintf("Unhandled exception (%d) - %s\n", regs.int_no, exceptions[regs.int_no]);
+
+	while (1) {}
 }
 
 void irq_handler(registers_t regs) {
